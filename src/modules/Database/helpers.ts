@@ -1,5 +1,5 @@
 import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
-import { PaginateOptions, PaginateReturn } from '@/modules/database/types';
+import { PaginateOptions, PaginateReturn } from '@/modules/Database/types';
 import { isNil } from 'lodash';
 
 /**

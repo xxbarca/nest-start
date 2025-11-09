@@ -1,18 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { CoreModule } from '@/modules/core/core.module';
-import { DatabaseModule } from '@/modules/database/database.module';
+import { CoreModule } from '@/modules/Core/core.module';
 import { ContentModule } from '@/modules/content/content.module';
-import { database } from '@/config';
+import { DatabaseModule } from '@/modules/Database/database.module';
+import { MallModule } from '@/modules/Mall/mall.module';
 
 @Module({
-  imports: [
-    CoreModule.forRoot(),
-    DatabaseModule.forRoot(database),
-    ContentModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [CoreModule.forRoot(), DatabaseModule, ContentModule, MallModule],
 })
 export class AppModule {}

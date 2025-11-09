@@ -1,13 +1,13 @@
 import { In, ObjectLiteral, SelectQueryBuilder } from 'typeorm';
-import { BaseRepository } from '@/modules/database/base/base.repository';
-import { QueryHook } from '@/modules/database/helpers';
+import { BaseRepository } from '@/modules/Database/base/base.repository';
+import { QueryHook } from '@/modules/Database/helpers';
 import { NotFoundException } from '@nestjs/common';
 import {
   Pagination,
   paginate as _paginate,
   IPaginationMeta,
 } from 'nestjs-typeorm-paginate';
-import { IPaginateDto } from '@/modules/database/types';
+import { IPaginateDto } from '@/modules/Database/types';
 
 export class BaseService<
   E extends ObjectLiteral,
@@ -64,7 +64,7 @@ export class BaseService<
    * @param data 需要删除的id列表
    */
   async delete(data: string[]) {
-    let items: E[] = await this.repository.find({
+    const items: E[] = await this.repository.find({
       where: { id: In(data) } as any,
     });
     return this.repository.remove(items);
