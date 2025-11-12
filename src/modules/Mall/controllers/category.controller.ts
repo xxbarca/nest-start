@@ -8,6 +8,6 @@ export class CategoryController {
 
   @Post()
   public create(@Body() data: CreateCategoryDto) {
-    return data;
+    return this.service.create(data);
   }
 }
