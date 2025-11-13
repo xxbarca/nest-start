@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { CategoryService } from '@/modules/Mall/services';
 import { CreateCategoryDto } from '@/modules/Mall/dtos';
 
@@ -9,5 +16,10 @@ export class CategoryController {
   @Post()
   public create(@Body() data: CreateCategoryDto) {
     return this.service.create(data);
+  }
+
+  @Delete('/:id')
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return this.service.delete([id]);
   }
 }
