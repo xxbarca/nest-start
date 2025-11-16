@@ -9,6 +9,8 @@ export type QueryHook<Entity extends ObjectLiteral> = (
   hookQuery: SelectQueryBuilder<Entity>,
 ) => Promise<SelectQueryBuilder<Entity>>;
 
+export type ServiceListQueryOption = Record<string, any>;
+
 /**
  * 分页函数
  * @param qb queryBuilder实例
@@ -38,7 +40,7 @@ export const paginate = async <E extends ObjectLiteral>(
       itemCount,
       pageSize: limit,
       totalPages,
-      pageNum: page,
+      pageNo: page,
     },
   };
 };

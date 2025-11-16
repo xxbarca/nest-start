@@ -1,18 +1,19 @@
 import { In, ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 import { BaseRepository } from '@/modules/Database/base/base.repository';
-import { QueryHook } from '@/modules/Database/helpers';
-import { NotFoundException } from '@nestjs/common';
 import {
-  Pagination,
-  paginate as _paginate,
-  IPaginationMeta,
-} from 'nestjs-typeorm-paginate';
-import { IPaginateDto } from '@/modules/Database/types';
+  paginate,
+  QueryHook,
+  ServiceListQueryOption,
+} from '@/modules/Database/helpers';
+import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+
+import { PaginateOptions, PaginateReturn } from '@/modules/Database/types';
+import { omit, omitBy } from 'lodash';
 
 export class BaseService<
   E extends ObjectLiteral,
   R extends BaseRepository<E>,
-  M extends IPaginationMeta = IPaginationMeta,
+  P extends ServiceListQueryOption = ServiceListQueryOption,
 > {
   /**
    * 服务默认存储类
@@ -27,21 +28,44 @@ export class BaseService<
       );
     }
   }
-
   /**
    * 获取分页数据
+   * @param qb
    * @param options 分页选项
    * @param callback 回调查询
    */
-  async paginate(
-    options: IPaginateDto<M>,
+  protected async buildListQB(
+    qb: SelectQueryBuilder<E>,
+    options?: P,
     callback?: QueryHook<E>,
-  ): Promise<Pagination<E, M>> {
-    const qb = await this.buildListQuery(
+  ) {
+    options = omitBy(
+      options,
+      (value) =>
+        value === null ||
+        value === undefined ||
+        value === '' ||
+        Number.isNaN(value),
+    ) as P;
+    const wheres = Object.fromEntries(
+      Object.entries(options || {}).map(([key, value]) => [key, value]),
+    );
+    qb = qb.where(wheres);
+    return callback ? callback(qb) : qb;
+  }
+
+  async page(
+    options?: PaginateOptions,
+    callback?: QueryHook<E>,
+  ): Promise<PaginateReturn<E>> {
+    const o = omit(options, ['pageNo', 'pageSize']);
+    const queryOptions = (o ?? {}) as P;
+    const qb = await this.buildListQB(
       this.repository.buildBaseQuery(),
+      queryOptions,
       callback,
     );
-    return _paginate(qb, options);
+    return paginate(qb, options);
   }
 
   async detail(id: string, callback?: QueryHook<E>): Promise<E> {
@@ -57,6 +81,23 @@ export class BaseService<
         `${this.repository.qbName} ${id} not exists!`,
       );
     return item;
+  }
+
+  async update(id: string, other: Record<string, any>) {
+    try {
+      return await this.repository.update(id, other);
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async list(options?: P, callback?: QueryHook<E>) {
+    const qb = await this.buildListQB(
+      this.repository.buildBaseQuery(),
+      options,
+      callback,
+    );
+    return qb.getMany();
   }
 
   /**

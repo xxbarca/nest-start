@@ -1,11 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { OnlineStatus } from '@/modules/Mall/constants';
+import { _BaseEntity } from '@/modules/Database/base';
 
 @Entity('category')
-export class CategoryEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class CategoryEntity extends _BaseEntity {
   @Column({
     comment: '名称',
     unique: true,

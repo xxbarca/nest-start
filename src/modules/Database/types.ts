@@ -33,7 +33,7 @@ export interface PaginateMeta {
   /**
    * 当前页数
    */
-  pageNum: number;
+  pageNo: number;
 }
 
 /**
@@ -43,11 +43,11 @@ export interface PaginateOptions {
   /**
    * 当前页数
    */
-  pageNo?: number;
+  pageNo: number;
   /**
    * 每页显示数量
    */
-  pageSize?: number;
+  pageSize: number;
 }
 
 /**
