@@ -1,19 +1,13 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-  Min,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, Min } from 'class-validator';
 import { DtoValidation } from '@/modules/Core/decorators';
 import { PartialType, PickType } from '@nestjs/mapped-types';
 import { ValidatorGroup } from '@/modules/Core/constants';
 import { PaginateOptions } from '@/modules/Database/types';
 import { Transform } from 'class-transformer';
 import { toNumber } from 'lodash';
+import { BaseDto } from '@/modules/Database/base';
 
-class BaseCategoryDto {
+class BaseCategoryDto extends BaseDto {
   @IsNotEmpty({
     message: '分类名称不能为空',
     groups: [ValidatorGroup.CREATE],
@@ -28,12 +22,7 @@ export class CreateCategoryDto extends PickType(BaseCategoryDto, [
 ] as const) {}
 
 @DtoValidation({ groups: [ValidatorGroup.UPDATE] })
-export class UpdateCategoryDto extends PartialType(BaseCategoryDto) {
-  @IsUUID(undefined, { message: 'id格式不正确' })
-  @IsString()
-  @IsNotEmpty({ message: '分类id不能为空' })
-  id: string;
-}
+export class UpdateCategoryDto extends PartialType(BaseCategoryDto) {}
 
 @DtoValidation({ groups: [ValidatorGroup.PAGE] })
 export class PaginateCategoryDto

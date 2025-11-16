@@ -1,12 +1,13 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-export class _BaseEntity extends BaseEntity {
+export abstract class _BaseEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -18,4 +19,17 @@ export class _BaseEntity extends BaseEntity {
 
   @CreateDateColumn()
   create_time: Date;
+
+  @Column({
+    comment: '描述',
+    type: 'text',
+    nullable: true,
+  })
+  description: string;
+
+  @Column({
+    comment: '排序',
+    default: 0,
+  })
+  index: number;
 }
