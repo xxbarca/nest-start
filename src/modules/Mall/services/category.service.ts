@@ -16,13 +16,34 @@ export class CategoryService extends BaseService<
   }
 
   async create(data: CreateCategoryDto): Promise<CategoryEntity> {
-    const item: CategoryEntity = await this.repository.save(data);
+    let p: CategoryEntity = null;
+    if (data.parent) {
+      p = await this.repository.findOne({
+        where: { id: data.parent },
+      });
+    }
+    const item: CategoryEntity = await this.repository.save({
+      ...data,
+      parent: p,
+    });
     return await this.detail(item.id);
   }
 
   async _update(data: UpdateCategoryDto): Promise<CategoryEntity> {
-    await super.update(data.id, omit(data, ['id']));
+    let p: CategoryEntity = null;
+    if (data.parent) {
+      p = await this.repository.findOne({
+        where: { id: data.parent },
+      });
+    }
+    await super.update(data.id, { ...omit(data, ['id']), parent: p });
     return await super.detail(data.id);
+  }
+
+  async detail(id: string) {
+    return await super.detail(id, async (qb) =>
+      qb.leftJoinAndSelect(`${this.repository.qbName}.parent`, 'parent'),
+    );
   }
 
   async all() {

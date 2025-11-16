@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsUUID, Min } from 'class-validator';
 import { DtoValidation } from '@/modules/Core/decorators';
 import { PartialType, PickType } from '@nestjs/mapped-types';
 import { ValidatorGroup } from '@/modules/Core/constants';
@@ -14,11 +14,16 @@ class BaseCategoryDto extends BaseDto {
   })
   @IsOptional({ groups: [ValidatorGroup.PAGE, ValidatorGroup.UPDATE] })
   name: string;
+
+  @IsUUID()
+  @IsOptional()
+  parent: string;
 }
 
 @DtoValidation({ groups: [ValidatorGroup.CREATE] })
 export class CreateCategoryDto extends PickType(BaseCategoryDto, [
   'name',
+  'parent',
 ] as const) {}
 
 @DtoValidation({ groups: [ValidatorGroup.UPDATE] })

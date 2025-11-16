@@ -1,4 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import type { Relation } from 'typeorm';
+
 import { OnlineStatus } from '@/modules/Mall/constants';
 import { _BaseEntity } from '@/modules/Database/base';
 
@@ -23,4 +25,13 @@ export class CategoryEntity extends _BaseEntity {
     default: OnlineStatus.ONLINE,
   })
   online: OnlineStatus;
+
+  @OneToMany(() => CategoryEntity, (cate) => cate.parent)
+  children: Relation<CategoryEntity>[];
+
+  @ManyToOne(() => CategoryEntity, (cate) => cate.children, {
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'parent_id' })
+  parent: Relation<CategoryEntity> | null;
 }

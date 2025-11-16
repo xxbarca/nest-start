@@ -68,13 +68,21 @@ export class BaseService<
     return paginate(qb, options);
   }
 
+  protected async buildItemQB(
+    id: string,
+    qb: SelectQueryBuilder<E>,
+    callback?: QueryHook<E>,
+  ) {
+    qb.where(`${this.repository.qbName}.id = :id`, { id });
+    return callback ? callback(qb) : qb;
+  }
+
   async detail(id: string, callback?: QueryHook<E>): Promise<E> {
-    let qb = await this.buildItemQuery(
+    const qb = await this.buildItemQB(
+      id,
       this.repository.buildBaseQuery(),
       callback,
     );
-    qb.where(`${this.repository.qbName}.id = :id`, { id });
-    if (callback) qb = await callback(qb);
     const item = await qb.getOne();
     if (!item)
       throw new NotFoundException(
