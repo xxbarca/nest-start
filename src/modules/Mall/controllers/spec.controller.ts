@@ -1,4 +1,12 @@
-import { Body, Controller, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { SpecKeyService } from '@/modules/Mall/services';
 import { CreateSpecKeyDto, UpdateSpecKeyDto } from '@/modules/Mall/dtos';
 import { omit } from 'lodash';
@@ -15,5 +23,10 @@ export class SpecController {
   @Patch('/key/update')
   async updateKey(@Body() data: UpdateSpecKeyDto) {
     return await this.keyService.update(data.id, omit(data, ['id']));
+  }
+
+  @Delete('/key/:id')
+  async deleteKey(@Param('id', ParseUUIDPipe) id: string) {
+    await this.keyService.delete([id]);
   }
 }
