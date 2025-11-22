@@ -1,4 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BaseService } from '@/modules/Database/base';
+import { SpecKeyEntity } from '@/modules/Mall/entities';
+import { SpecKeyRepository } from '@/modules/Mall/repositories';
+import { CreateSpecKeyDto } from '@/modules/Mall/dtos';
 
 @Injectable()
-export class SpecKeyService {}
+export class SpecKeyService extends BaseService<
+  SpecKeyEntity,
+  SpecKeyRepository
+> {
+  constructor(protected repository: SpecKeyRepository) {
+    super(repository);
+  }
+
+  async create(data: CreateSpecKeyDto): Promise<SpecKeyEntity> {
+    try {
+      return await this.repository.save(data);
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+}
