@@ -13,6 +13,6 @@ export class BaseDto {
     message: 'id格式不正确',
     groups: [ValidatorGroup.UPDATE],
   })
-  @IsNotEmpty({ message: '分类id不能为空', groups: [ValidatorGroup.UPDATE] })
+  @IsNotEmpty({ message: 'id不能为空', groups: [ValidatorGroup.UPDATE] })
   id: string;
 }

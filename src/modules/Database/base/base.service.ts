@@ -9,6 +9,7 @@ import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 
 import { PaginateOptions, PaginateReturn } from '@/modules/Database/types';
 import { omit, omitBy } from 'lodash';
+import { UnifyResponse } from '@/modules/Core/helpers';
 
 export class BaseService<
   E extends ObjectLiteral,
@@ -93,7 +94,8 @@ export class BaseService<
 
   async update(id: string, other: Record<string, any>) {
     try {
-      return await this.repository.update(id, other);
+      await this.repository.update(id, other);
+      return UnifyResponse.updateSuccess();
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }

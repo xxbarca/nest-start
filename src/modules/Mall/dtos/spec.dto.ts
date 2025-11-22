@@ -1,7 +1,7 @@
 import { BaseDto } from '@/modules/Database/base';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ValidatorGroup } from '@/modules/Core/constants';
-import { PickType } from '@nestjs/mapped-types';
+import { PartialType, PickType } from '@nestjs/mapped-types';
 import { DtoValidation } from '@/modules/Core/decorators';
 
 class BaseSpecKeyDto extends BaseDto {
@@ -21,3 +21,6 @@ export class CreateSpecKeyDto extends PickType(BaseSpecKeyDto, [
   'name',
   'unit',
 ] as const) {}
+
+@DtoValidation({ groups: [ValidatorGroup.UPDATE] })
+export class UpdateSpecKeyDto extends PartialType(BaseSpecKeyDto) {}

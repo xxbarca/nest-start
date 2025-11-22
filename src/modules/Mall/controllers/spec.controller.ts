@@ -1,6 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Patch, Post } from '@nestjs/common';
 import { SpecKeyService } from '@/modules/Mall/services';
-import { CreateSpecKeyDto } from '@/modules/Mall/dtos';
+import { CreateSpecKeyDto, UpdateSpecKeyDto } from '@/modules/Mall/dtos';
+import { omit } from 'lodash';
 
 @Controller('spec')
 export class SpecController {
@@ -9,5 +10,10 @@ export class SpecController {
   @Post('key')
   async createKey(@Body() data: CreateSpecKeyDto) {
     return await this.keyService.create(data);
+  }
+
+  @Patch('/key/update')
+  async updateKey(@Body() data: UpdateSpecKeyDto) {
+    return await this.keyService.update(data.id, omit(data, ['id']));
   }
 }
