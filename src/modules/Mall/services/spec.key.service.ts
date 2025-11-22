@@ -16,8 +16,8 @@ export class SpecKeyService extends BaseService<
 
   async create(data: CreateSpecKeyDto) {
     try {
-      await this.repository.save(data);
-      return UnifyResponse.createSuccess();
+      return await this.repository.save(data);
+      // return UnifyResponse.createSuccess();
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
