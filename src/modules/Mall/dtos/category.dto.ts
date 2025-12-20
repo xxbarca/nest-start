@@ -8,13 +8,6 @@ import { toNumber } from 'lodash';
 import { BaseDto } from '@/modules/Database/base';
 
 class BaseCategoryDto extends BaseDto {
-  @IsNotEmpty({
-    message: '分类名称不能为空',
-    groups: [ValidatorGroup.CREATE],
-  })
-  @IsOptional({ groups: [ValidatorGroup.PAGE, ValidatorGroup.UPDATE] })
-  name: string;
-
   @IsUUID()
   @IsOptional()
   parent: string;

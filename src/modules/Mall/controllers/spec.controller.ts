@@ -8,13 +8,20 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { SpecKeyService } from '@/modules/Mall/services';
-import { CreateSpecKeyDto, UpdateSpecKeyDto } from '@/modules/Mall/dtos';
+import { SpecKeyService, SpecValueService } from '@/modules/Mall/services';
+import {
+  CreateSpecKeyDto,
+  CreateSpecValueDto,
+  UpdateSpecKeyDto,
+} from '@/modules/Mall/dtos';
 import { omit } from 'lodash';
 
 @Controller('spec')
 export class SpecController {
-  constructor(private keyService: SpecKeyService) {}
+  constructor(
+    private keyService: SpecKeyService,
+    private valueService: SpecValueService,
+  ) {}
 
   @Post('key')
   async createKey(@Body() data: CreateSpecKeyDto) {
@@ -34,5 +41,10 @@ export class SpecController {
   @Get('key/list')
   async specKeyList() {
     return await this.keyService.list();
+  }
+
+  @Post('value')
+  async createValue(@Body() data: CreateSpecValueDto) {
+    return await this.valueService.create(data);
   }
 }

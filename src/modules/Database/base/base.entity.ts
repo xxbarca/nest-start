@@ -32,4 +32,12 @@ export abstract class _BaseEntity extends BaseEntity {
     default: 0,
   })
   index: number;
+
+  @Column({
+    type: 'varchar',
+    length: 100,
+    nullable: false,
+    unique: true,
+  })
+  name: string;
 }

@@ -3,7 +3,6 @@ import { BaseService } from '@/modules/Database/base';
 import { SpecKeyEntity } from '@/modules/Mall/entities';
 import { SpecKeyRepository } from '@/modules/Mall/repositories';
 import { CreateSpecKeyDto } from '@/modules/Mall/dtos';
-import { UnifyResponse } from '@/modules/Core/helpers';
 
 @Injectable()
 export class SpecKeyService extends BaseService<
@@ -17,7 +16,6 @@ export class SpecKeyService extends BaseService<
   async create(data: CreateSpecKeyDto) {
     try {
       return await this.repository.save(data);
-      // return UnifyResponse.createSuccess();
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }

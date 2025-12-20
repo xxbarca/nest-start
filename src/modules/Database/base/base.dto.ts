@@ -2,6 +2,13 @@ import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { ValidatorGroup } from '@/modules/Core/constants';
 
 export class BaseDto {
+  @IsNotEmpty({
+    message: '名称不能为空',
+    groups: [ValidatorGroup.CREATE],
+  })
+  @IsOptional({ groups: [ValidatorGroup.PAGE, ValidatorGroup.UPDATE] })
+  name: string;
+
   @IsString()
   @IsOptional()
   description: string;

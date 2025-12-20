@@ -7,12 +7,6 @@ import { _BaseEntity } from '@/modules/Database/base';
 @Entity('category')
 export class CategoryEntity extends _BaseEntity {
   @Column({
-    comment: '名称',
-    unique: true,
-  })
-  name: string;
-
-  @Column({
     comment: '图片',
     nullable: true,
   })

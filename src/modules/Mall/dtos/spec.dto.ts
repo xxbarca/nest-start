@@ -1,17 +1,10 @@
 import { BaseDto } from '@/modules/Database/base';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 import { ValidatorGroup } from '@/modules/Core/constants';
 import { PartialType, PickType } from '@nestjs/mapped-types';
 import { DtoValidation } from '@/modules/Core/decorators';
 
 class BaseSpecKeyDto extends BaseDto {
-  @IsNotEmpty({
-    message: '规格名不能为空',
-    groups: [ValidatorGroup.CREATE],
-  })
-  @IsOptional({ groups: [ValidatorGroup.PAGE, ValidatorGroup.UPDATE] })
-  name: string;
-
   @IsOptional()
   unit: string;
 }
@@ -24,3 +17,21 @@ export class CreateSpecKeyDto extends PickType(BaseSpecKeyDto, [
 
 @DtoValidation({ groups: [ValidatorGroup.UPDATE] })
 export class UpdateSpecKeyDto extends PartialType(BaseSpecKeyDto) {}
+
+class BaseSpecValueDto extends BaseDto {
+  @IsUUID(undefined, {
+    groups: [ValidatorGroup.CREATE, ValidatorGroup.UPDATE],
+    message: '规格名id格式不正确',
+  })
+  @IsNotEmpty({
+    groups: [ValidatorGroup.UPDATE, ValidatorGroup.CREATE],
+    message: '规格名不能为空',
+  })
+  key: string;
+}
+
+@DtoValidation({ groups: [ValidatorGroup.CREATE] })
+export class CreateSpecValueDto extends PickType(BaseSpecValueDto, [
+  'name',
+  'key',
+] as const) {}
