@@ -118,7 +118,8 @@ export class BaseService<
     const items: E[] = await this.repository.find({
       where: { id: In(data) } as any,
     });
-    return this.repository.remove(items);
+    await this.repository.remove(items);
+    return '删除成功';
   }
 
   protected async buildItemQuery(

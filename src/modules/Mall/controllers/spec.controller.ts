@@ -47,4 +47,9 @@ export class SpecController {
   async createValue(@Body() data: CreateSpecValueDto) {
     return await this.valueService.create(data);
   }
+
+  @Delete('value/:id')
+  async deleteValue(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.valueService.delete([id]);
+  }
 }
