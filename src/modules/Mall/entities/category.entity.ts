@@ -3,6 +3,7 @@ import type { Relation } from 'typeorm';
 
 import { OnlineStatus } from '@/modules/Mall/constants';
 import { _BaseEntity } from '@/modules/Database/base';
+import { SpuEntity } from '@/modules/Mall/entities/spu.entity';
 
 @Entity('category')
 export class CategoryEntity extends _BaseEntity {
@@ -28,4 +29,7 @@ export class CategoryEntity extends _BaseEntity {
   })
   @JoinColumn({ name: 'parent_id' })
   parent: Relation<CategoryEntity> | null;
+
+  @OneToMany(() => SpuEntity, (spu) => spu.category)
+  spus: Relation<SpuEntity>[];
 }
