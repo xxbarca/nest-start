@@ -1,6 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Patch, Post } from '@nestjs/common';
 import { SpuService } from '@/modules/Mall/services';
-import { CreateSpuDto } from '@/modules/Mall/dtos';
+import { CreateSpuDto, UpdateSpuDto } from '@/modules/Mall/dtos';
 
 @Controller('spu')
 export class SpuController {
@@ -9,5 +9,10 @@ export class SpuController {
   @Post()
   async create(@Body() spuDto: CreateSpuDto) {
     return await this.spuService.create(spuDto);
+  }
+
+  @Patch('')
+  async update(@Body() spuDto: UpdateSpuDto) {
+    return await this.spuService._update(spuDto);
   }
 }

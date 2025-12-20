@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { BaseService } from '@/modules/Database/base';
 import { SpuEntity } from '@/modules/Mall/entities';
 import { CategoryRepository, SpuRepository } from '@/modules/Mall/repositories';
-import { CreateSpuDto } from '@/modules/Mall/dtos';
+import { CreateSpuDto, UpdateSpuDto } from '@/modules/Mall/dtos';
+import { omit } from 'lodash';
 
 @Injectable()
 export class SpuService extends BaseService<SpuEntity, SpuRepository> {
@@ -22,5 +23,13 @@ export class SpuService extends BaseService<SpuEntity, SpuRepository> {
       category: cate,
     });
     return '创建成功';
+  }
+
+  async _update(spuDto: UpdateSpuDto) {
+    const cate = await this.categoryRepository.findOne({
+      where: { id: spuDto.category },
+    });
+    await super.update(spuDto.id, { ...omit(spuDto, ['id']), category: cate });
+    return await super.detail(spuDto.id);
   }
 }

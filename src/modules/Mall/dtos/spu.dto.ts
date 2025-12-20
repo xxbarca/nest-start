@@ -9,6 +9,7 @@ import {
 import { ValidatorGroup } from '@/modules/Core/constants';
 import { OnlineStatus } from '@/modules/Mall/constants';
 import { DtoValidation } from '@/modules/Core/decorators';
+import { PartialType } from '@nestjs/mapped-types';
 
 class BaseSpuDto extends BaseDto {
   @IsUUID(undefined, {
@@ -43,3 +44,6 @@ class BaseSpuDto extends BaseDto {
 
 @DtoValidation({ groups: [ValidatorGroup.CREATE] })
 export class CreateSpuDto extends BaseSpuDto {}
+
+@DtoValidation({ groups: [ValidatorGroup.UPDATE] })
+export class UpdateSpuDto extends PartialType(BaseSpuDto) {}
