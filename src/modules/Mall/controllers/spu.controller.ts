@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { SpuService } from '@/modules/Mall/services';
 import { CreateSpuDto, UpdateSpuDto } from '@/modules/Mall/dtos';
 
@@ -19,5 +28,10 @@ export class SpuController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return await this.spuService.delete([id]);
+  }
+
+  @Get(':id')
+  async detail(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.spuService.detail(id);
   }
 }
