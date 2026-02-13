@@ -1,8 +1,15 @@
 import { BaseDto } from '@/modules/Database/base';
-import { IsNotEmpty, IsNumber, IsOptional, IsUUID } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsUUID,
+  ValidateIf,
+} from 'class-validator';
 import { ValidatorGroup } from '@/modules/Core/constants';
-import { PickType } from '@nestjs/mapped-types';
+import { PartialType, PickType } from '@nestjs/mapped-types';
 import { DtoValidation } from '@/modules/Core/decorators';
+import { SkuEntity } from '@/modules/Mall/entities';
 
 class BaseSkuDto extends BaseDto {
   @IsNotEmpty({
@@ -15,8 +22,9 @@ class BaseSkuDto extends BaseDto {
     groups: [ValidatorGroup.CREATE, ValidatorGroup.UPDATE],
     message: 'SPU id格式不正确',
   })
+  @ValidateIf((o: SkuEntity) => !!o.spu, { groups: [ValidatorGroup.UPDATE] })
   @IsNotEmpty({
-    groups: [ValidatorGroup.UPDATE, ValidatorGroup.CREATE],
+    groups: [ValidatorGroup.CREATE],
     message: 'SPU不能为空',
   })
   spu: string;
@@ -41,3 +49,6 @@ export class CreateSkuDto extends PickType(BaseSkuDto, [
   'name',
   'description',
 ]) {}
+
+@DtoValidation({ groups: [ValidatorGroup.UPDATE] })
+export class UpdateSkuDto extends PartialType(BaseSkuDto) {}

@@ -4,10 +4,11 @@ import {
   Delete,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { SkuService } from '@/modules/Mall/services';
-import { CreateSkuDto } from '@/modules/Mall/dtos';
+import { CreateSkuDto, UpdateSkuDto } from '@/modules/Mall/dtos';
 
 @Controller('sku')
 export class SkuController {
@@ -21,5 +22,10 @@ export class SkuController {
   @Delete(':id')
   async delete(@Param('id', ParseUUIDPipe) id: string) {
     return await this.service.delete([id]);
+  }
+
+  @Patch()
+  async update(@Body() updateSkuDto: UpdateSkuDto) {
+    return await this.service._update(updateSkuDto);
   }
 }
