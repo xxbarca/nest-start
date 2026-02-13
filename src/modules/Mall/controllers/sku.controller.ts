@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { SkuService } from '@/modules/Mall/services';
 import { CreateSkuDto } from '@/modules/Mall/dtos';
 
@@ -9,5 +16,10 @@ export class SkuController {
   @Post()
   async create(@Body() createSkuDto: CreateSkuDto) {
     return await this.service.create(createSkuDto);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.service.delete([id]);
   }
 }
