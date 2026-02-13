@@ -1,8 +1,9 @@
 import { _BaseEntity } from '@/modules/Database/base';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import type { Relation } from 'typeorm';
 import { OnlineStatus } from '@/modules/Mall/constants';
 import { CategoryEntity } from '@/modules/Mall/entities/category.entity';
+import { SkuEntity } from '@/modules/Mall/entities/sku.entity';
 
 @Entity('spu')
 export class SpuEntity extends _BaseEntity {
@@ -37,4 +38,7 @@ export class SpuEntity extends _BaseEntity {
   })
   @JoinColumn({ name: 'category_id' })
   category: Relation<CategoryEntity>;
+
+  @OneToMany(() => SkuEntity, (sku) => sku.spu)
+  skus: Relation<SkuEntity>[];
 }
